@@ -29,6 +29,10 @@ jobs:
           sudo apt-get -y update
           sudo apt-get -y install podman
           podman --help
+      - name: compose up
+        run: docker-compose up -d
+      - name: compose down
+        run: docker-compose down
       # set commit status
       - name: update commit status (success)
         uses: ouzi-dev/commit-status-updater@v1.1.0
