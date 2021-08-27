@@ -6,9 +6,10 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
+    
   pull_request:
     branches: [ master ]
+    types: [review_requested, ready_for_review]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -19,12 +20,28 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - if: always()
+      - name: install podman
+        run: |
+          sudo apt-get -y update
+          sudo apt-get -y install podman docker-compose
+          podman --version
+          sudo curl -H "Content-Type: application/json" --unix-socket /var/run/docker.sock http://localhost/_ping
+      - name: compose up
+        run: docker-compose up -d
+      - name: compose down
+        run: docker-compose down
+      # set commit status
+      - name: update commit status (success)
         uses: ouzi-dev/commit-status-updater@v1.1.0
+        if: success()
         with:
           status: "success"
+      - name: update commit status (failure)
+        uses: ouzi-dev/commit-status-updater@v1.1.0
+        if: failure()
+        with:
+          status: "failure"
