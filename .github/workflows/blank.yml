@@ -29,7 +29,6 @@ jobs:
           apt-get -y update
           apt-get -y install podman
           podman --help
-      - run: exit 1
       # set commit status
       - name: update commit status (success)
         uses: ouzi-dev/commit-status-updater@v1.1.0
