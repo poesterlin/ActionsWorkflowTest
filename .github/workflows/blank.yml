@@ -27,8 +27,9 @@ jobs:
       - name: install podman
         run: |
           sudo apt-get -y update
-          sudo apt-get -y install podman
-          podman --help
+          sudo apt-get -y install podman docker-compose
+          podman --version
+          sudo curl -H "Content-Type: application/json" --unix-socket /var/run/docker.sock http://localhost/_ping
       - name: compose up
         run: docker-compose up -d
       - name: compose down
