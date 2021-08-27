@@ -26,8 +26,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: install podman
         run: |
-          apt-get -y update
-          apt-get -y install podman
+          sudo apt-get -y update
+          sudo apt-get -y install podman
           podman --help
       # set commit status
       - name: update commit status (success)
