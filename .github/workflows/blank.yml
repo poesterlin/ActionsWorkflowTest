@@ -24,7 +24,15 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - if: always()
+      - run: exit 1
+      # set commit status
+      - name: update commit status (success)
         uses: ouzi-dev/commit-status-updater@v1.1.0
+        if: success()
+        with:
+          status: "success"
+      - name: update commit status (failure)
+        uses: ouzi-dev/commit-status-updater@v1.1.0
+        if: failure()
         with:
           status: "failure"
